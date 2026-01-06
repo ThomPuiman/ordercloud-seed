@@ -89,15 +89,8 @@ export async function seed(args: SeedArgs): Promise<SeedResponse | void> {
             // Decode the JWT token to extract the marketplace ID
             const decodedToken: any = jwtDecode(org_token);
             const tokenMarketplaceID = decodedToken.cid;
-
-            // Use marketplace ID from token if not provided
-            if (_.isNil(marketplaceID) || marketplaceID === Random.generateOrgID()) {
-                marketplaceID = tokenMarketplaceID;
-                logger(`Using marketplace ID from token: ${marketplaceID}`, MessageType.Success);
-            } else if (marketplaceID !== tokenMarketplaceID) {
-                return logger(`Provided marketplace ID "${marketplaceID}" does not match the client credentials marketplace ID "${tokenMarketplaceID}"`, MessageType.Error);
-            }
-
+            marketplaceID = tokenMarketplaceID;
+            
             Configuration.Set({ baseApiUrl: config.OrderCloudBaseUrl });
             Tokens.SetAccessToken(org_token);
 
